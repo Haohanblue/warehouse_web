@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div>
+  <div class="stock-container">
+    <div class="stock-header">
       <h1>库存实时数据</h1>
       <el-button @click="handleGetDataButton">获取数据</el-button>
       <el-button type="primary" @click="toggleEditMode">
@@ -14,13 +14,13 @@
         提交修改
       </el-button>
       <el-button
-      type="danger"
-      @click="handleClearAllStocks"
-    >
-      清空库存
-    </el-button>
+        type="danger"
+        @click="handleClearAllStocks"
+      >
+        清空库存
+      </el-button>
     </div>
-    <div>
+    <div class="stock-table">
       <el-tabs v-model="activeMonth" @tab-click="handleTabClick" class="demo-tabs">
         <el-tab-pane
           v-for="month in months"
@@ -28,16 +28,17 @@
           :label="`${month}月`"
           :name="String(month)"
         >
-          <el-table :data="tableData[month]" stripe style="width: 100%">
+          <el-table :data="tableData[month]" stripe style="width: 100%" :header-cell-style="{ textAlign: 'center' }">
             <!-- 固定左侧产品列 -->
-            <el-table-column prop="product" label="产品" fixed width="150" />
+            <el-table-column prop="product" label="产品" fixed width="100" />
             <!-- 动态生成城市列 -->
             <el-table-column
               v-for="(city, cityIndex) in cities"
               :key="city"
               :prop="city"
               :label="city"
-              :min-width="100"
+              :min-width="50"
+              :header-align="'center'"
             >
               <!-- 使用作用域插槽 -->
               <template #default="{ row, $index }">
@@ -45,7 +46,9 @@
                   <el-input
                     v-model.number="row[city]"
                     size="small"
+                    autosize
                     @change="handleCellChange(row, city)"
+                    class="cell-input"
                   ></el-input>
                 </div>
                 <div v-else>
@@ -234,7 +237,57 @@ const handleGetDataButton = () => {
 </script>
 
 <style scoped>
+.stock-container {
+  width: 100%;
+  max-width: 850px; /* 控制表格最大宽度 */
+  margin: 0 auto; /* 居中显示 */
+  padding: 0px;
+  background-color: #f9f9f9;
+}
+
+.stock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.stock-header h1 {
+  margin: 0;
+  font-size: 20px; /* 减小标题字体大小 */
+  color: #333;
+}
+
+.el-button {
+  margin-left: 10px;
+}
+
+.stock-table {
+  overflow-x: auto; /* 允许横向滚动 */
+}
+
 .demo-tabs {
   width: 100%;
+}
+
+.el-table th, .el-table td {
+  padding: 5px; /* 减小表格单元格的填充 */
+  font-size: 12px; /* 减小字体大小 */
+}
+
+.el-table-column {
+  text-align: center;
+}
+
+.cell-input .el-input__inner {
+  padding: 2px 5px; /* 减小输入框的填充 */
+}
+
+.el-input {
+  max-width: 60px; /* 控制输入框的最大宽度 */
+}
+
+.el-table--striped .el-table__body tr:nth-child(odd) {
+  background-color: #f5f7fa; /* 自定义间隔行颜色 */
 }
 </style>
