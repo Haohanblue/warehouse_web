@@ -1,28 +1,30 @@
 <template>
-    <div>
+    <div class="sell-container">
       <h1>销售出库</h1>
       <el-button type="primary" @click="submitSales">提交销售</el-button>
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" class="custom-table">
         <!-- 第一列：产品 -->
-        <el-table-column prop="product" label="产品" fixed width="150" />
+        <el-table-column prop="product" label="产品" fixed width="100" />
         <!-- 动态生成城市列 -->
         <el-table-column
           v-for="(city, cityIndex) in cities"
           :key="city"
           :label="city"
-          :min-width="200"
+          :min-width="120"
         >
           <template #default="{ row }">
-            <div>
+            <div class="input-container">
               <el-input
                 v-model.number="row[city].quantity"
                 placeholder="数量"
-                size="small"
+                size="mini"
+                class="small-input"
               ></el-input>
               <el-input
                 v-model.number="row[city].month"
                 placeholder="月份"
-                size="small"
+                size="mini"
+                class="small-input"
               ></el-input>
             </div>
           </template>
@@ -30,7 +32,7 @@
       </el-table>
     </div>
   </template>
-  
+
   <script lang="ts" setup>
   import { ref } from 'vue';
   import { ElMessage } from 'element-plus';
@@ -106,4 +108,22 @@
     }
   };
   </script>
-  
+  <style scoped>
+.sell-container {
+    max-width: 100%; /* 控制表格最大宽度 */
+}
+
+.custom-table {
+  font-size: 12px; /* 减小表格字体大小 */
+}
+
+.input-container {
+  display: flex;
+  gap: 5px; /* 减小输入框之间的间距 */
+}
+
+.small-input .el-input__inner {
+  padding: 2px 5px; /* 减小输入框的填充 */
+  max-width: 60px; /* 控制输入框的最大宽度 */
+}
+</style>
